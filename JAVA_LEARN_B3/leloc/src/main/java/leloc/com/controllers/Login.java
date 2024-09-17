@@ -1,0 +1,69 @@
+package leloc.com.controllers;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+import leloc.com.service.IUserService;
+import leloc.com.models.User;
+import leloc.com.service.Impl.UserService;
+
+/**
+ * Servlet implementation class Login
+ */
+public class Login extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+    private UserService UserService;
+
+    public void init() {
+    	UserService = new UserService();
+    }   
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public Login() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+		
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+
+        try {
+            if (UserService.validate(user)) {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("logintc.jsp");
+                dispatcher.forward(request, response);
+            } else {
+                response.sendRedirect("login.jsp");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+		
+		
+	}
+
+}
